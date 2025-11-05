@@ -9,19 +9,19 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as DynamicFromRouteImport } from './routes/dynamic-from'
-import { Route as DynamicFromManifestRouteImport } from './routes/dynamic-from.manifest'
+import { Route as DynamicFromIndexRouteImport } from './routes/dynamic-from/index'
+import { Route as DynamicFromManifestRouteImport } from './routes/dynamic-from/manifest'
 import { Route as DemoTanstackQueryRouteImport } from './routes/demo/tanstack-query'
 
-const DynamicFromRoute = DynamicFromRouteImport.update({
-  id: '/dynamic-from',
-  path: '/dynamic-from',
+const DynamicFromIndexRoute = DynamicFromIndexRouteImport.update({
+  id: '/dynamic-from/',
+  path: '/dynamic-from/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DynamicFromManifestRoute = DynamicFromManifestRouteImport.update({
-  id: '/manifest',
-  path: '/manifest',
-  getParentRoute: () => DynamicFromRoute,
+  id: '/dynamic-from/manifest',
+  path: '/dynamic-from/manifest',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const DemoTanstackQueryRoute = DemoTanstackQueryRouteImport.update({
   id: '/demo/tanstack-query',
@@ -30,53 +30,54 @@ const DemoTanstackQueryRoute = DemoTanstackQueryRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/dynamic-from': typeof DynamicFromRouteWithChildren
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/dynamic-from/manifest': typeof DynamicFromManifestRoute
+  '/dynamic-from': typeof DynamicFromIndexRoute
 }
 export interface FileRoutesByTo {
-  '/dynamic-from': typeof DynamicFromRouteWithChildren
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/dynamic-from/manifest': typeof DynamicFromManifestRoute
+  '/dynamic-from': typeof DynamicFromIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/dynamic-from': typeof DynamicFromRouteWithChildren
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/dynamic-from/manifest': typeof DynamicFromManifestRoute
+  '/dynamic-from/': typeof DynamicFromIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/dynamic-from' | '/demo/tanstack-query' | '/dynamic-from/manifest'
+  fullPaths: '/demo/tanstack-query' | '/dynamic-from/manifest' | '/dynamic-from'
   fileRoutesByTo: FileRoutesByTo
-  to: '/dynamic-from' | '/demo/tanstack-query' | '/dynamic-from/manifest'
+  to: '/demo/tanstack-query' | '/dynamic-from/manifest' | '/dynamic-from'
   id:
     | '__root__'
-    | '/dynamic-from'
     | '/demo/tanstack-query'
     | '/dynamic-from/manifest'
+    | '/dynamic-from/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  DynamicFromRoute: typeof DynamicFromRouteWithChildren
   DemoTanstackQueryRoute: typeof DemoTanstackQueryRoute
+  DynamicFromManifestRoute: typeof DynamicFromManifestRoute
+  DynamicFromIndexRoute: typeof DynamicFromIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/dynamic-from': {
-      id: '/dynamic-from'
+    '/dynamic-from/': {
+      id: '/dynamic-from/'
       path: '/dynamic-from'
       fullPath: '/dynamic-from'
-      preLoaderRoute: typeof DynamicFromRouteImport
+      preLoaderRoute: typeof DynamicFromIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dynamic-from/manifest': {
       id: '/dynamic-from/manifest'
-      path: '/manifest'
+      path: '/dynamic-from/manifest'
       fullPath: '/dynamic-from/manifest'
       preLoaderRoute: typeof DynamicFromManifestRouteImport
-      parentRoute: typeof DynamicFromRoute
+      parentRoute: typeof rootRouteImport
     }
     '/demo/tanstack-query': {
       id: '/demo/tanstack-query'
@@ -88,21 +89,10 @@ declare module '@tanstack/react-router' {
   }
 }
 
-interface DynamicFromRouteChildren {
-  DynamicFromManifestRoute: typeof DynamicFromManifestRoute
-}
-
-const DynamicFromRouteChildren: DynamicFromRouteChildren = {
-  DynamicFromManifestRoute: DynamicFromManifestRoute,
-}
-
-const DynamicFromRouteWithChildren = DynamicFromRoute._addFileChildren(
-  DynamicFromRouteChildren,
-)
-
 const rootRouteChildren: RootRouteChildren = {
-  DynamicFromRoute: DynamicFromRouteWithChildren,
   DemoTanstackQueryRoute: DemoTanstackQueryRoute,
+  DynamicFromManifestRoute: DynamicFromManifestRoute,
+  DynamicFromIndexRoute: DynamicFromIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
