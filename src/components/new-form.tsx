@@ -1,8 +1,11 @@
 import { useState } from "react";
 import { ZodDynamicForm } from "./form";
-import { exampleFormManifest } from "./form/manifest";
+import { Link } from "@tanstack/react-router";
+import { useManifestStore } from "./manifest-store";
 
 export const NEWForm = () => {
+  const { manifestJSON } = useManifestStore();
+
   const [formIsLoading, setFormIsLoading] = useState(false);
   const [submittedData, setSubmittedData] = useState<any>(null);
 
@@ -17,10 +20,15 @@ export const NEWForm = () => {
 
   return (
     <div className="font-sans  min-h-screen p-8">
+      <Link to="/dynamic-from/manifest">Change Manifest</Link>
       <div className="max-w-2xl mx-auto  p-8 rounded-lg shadow-md border ">
         <h1 className="text-2xl font-bold  mb-6">Dynamic User Profile</h1>
         <ZodDynamicForm
-          manifest={exampleFormManifest}
+          manifest={
+            manifestJSON
+              ? JSON.parse(manifestJSON)
+              : { formId: "default", fields: [] }
+          }
           onSubmit={handleFormSubmit}
           isLoading={formIsLoading}
         />
